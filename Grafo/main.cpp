@@ -1,5 +1,6 @@
 #include "GrafoLA.tpp"
 #include <iostream>
+#include "dfs.hpp"
 using namespace std;
 int main()
 {
@@ -7,6 +8,7 @@ int main()
 
   g.addVertice('A');
   g.addVertice('B');
+
   g.addVertice('C');
   g.addVertice('D');
 
@@ -17,22 +19,12 @@ int main()
   cout << "Hay C-B? " << g.hayArco('C', 'B') << "\n";
   cout << "Peso A-C = " << *(g.getCosto('A', 'C')) << "\n";
 
-  cout << "Adyacentes de A" << endl;
-  char *ady = g.getAdyacentes('A');
-  int n = g.getGrado('A');
-  for (int i = 0; i < n; i++)
-    cout << ady[i] << " ; ";
 
-  g.delArco('A', 'C');
+dfsForestArcos(g);      // clasificación de arcos
+    dfsForestSimple(g);     // recorrido/orden
 
-  cout << "\n";
-  cout << "Hay A-C? " << g.hayArco('A', 'C') << "\n";
-  cout << "Peso A-C = " << (g.getCosto('A', 'C')) << "\n";
-  cout << "Adyacentes de A" << endl;
-  ady = g.getAdyacentes('A');
-  n = g.getGrado('A');
-  for (int i = 0; i < n; i++)
-    cout << ady[i] << " ; ";
-  g.imprimir();
+    bool ciclo = hayCicloSimple(g);
+    std::cout << "Hay ciclo? " << (ciclo ? "si" : "no") << "\n";
+
   return 0;
 }
