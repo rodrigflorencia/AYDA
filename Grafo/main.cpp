@@ -7,11 +7,6 @@ int main()
   
   Grafo<char, int> g(true);
 
-  g.addVertice('A');
-  g.addVertice('B');
-  g.addVertice('C');
-  g.addVertice('D');
-
   g.addArco('A', 'B', 7);
   g.addArco('A', 'C', 5);
 
