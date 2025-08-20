@@ -3,6 +3,8 @@
 using namespace std;
 int main()
 {
+
+  
   Grafo<char, int> g(true);
 
   g.addVertice('A');
