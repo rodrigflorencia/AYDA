@@ -1,44 +1,6 @@
-#include <iostream>
 #include "Grafo.tpp"
-#include <set>
-#include <queue>
-#include <map>
-set<string> recomendaciones(Grafo<string> redSocial, string usuario)
-{
-  set<string> visitado;
-  visitado.insert(usuario);
-  map<string, int> orden;
-  orden.insert({usuario, 0});
+#include "redSocial.hpp"
 
-  set<string> recomendaciones;
-  queue<string> q;
-  q.push(usuario);
-  while (!q.empty())
-  {
-    string v = q.front();
-    q.pop();
-    set<string> ady = redSocial.getAdyacentes(v);
-    for (set<string>::iterator w = ady.begin(); w != ady.end(); w++)
-    {
-      if (visitado.find(*w) == visitado.end())
-      {
-        visitado.insert(*w);
-        int ordenW = orden[v] + 1;
-        orden.insert({*w, ordenW});
-        if (ordenW == 2)
-          recomendaciones.insert(*w);
-        else
-          q.push(*w);
-      }
-    }
-  }
-  return recomendaciones;
-}
-void mostrarRecomendaciones(set<string> r)
-{
-  for (set<string>::const_iterator it = r.begin(); it != r.end(); it++)
-    cout << *it << " ; ";
-}
 int main()
 {
   Grafo<string> g;
