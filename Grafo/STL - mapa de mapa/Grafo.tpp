@@ -27,7 +27,7 @@ Grafo<V, C>::~Grafo()
 template <class V, class C>
 Grafo<V, C>::Grafo(bool noDirigido)
 {
-    noDirigido = noDirigido;
+    this->noDirigido = noDirigido;
 }
 
 /**
@@ -38,7 +38,7 @@ Grafo<V, C>::Grafo(bool noDirigido)
 template <class V, class C>
 bool Grafo<V, C>::addVertice(const V &v)
 {
-    grafoMapa.emplace(v, unordered_map<V, C>{}).second;
+    this->grafoMapa.emplace(v, unordered_map<V, C>{}).second;
     return true;
 }
 
@@ -52,12 +52,9 @@ bool Grafo<V, C>::addVertice(const V &v)
 template <class V, class C>
 bool Grafo<V, C>::addArco(const V &u, const V &v, const C &c)
 {
-    addVertice(u);
-    addVertice(v);
-    bool creada = grafoMapa[u].find(v) == grafoMapa[u].end();
-    grafoMapa[u][v] = c;
-    if (noDirigido && u != v)
-        grafoMapa[v][u] = c;
+    this->grafoMapa[u].insert({v,c});
+    if (this->noDirigido && u != v)
+        this->grafoMapa[v].insert({u,c});
     return true;
 }
 
@@ -70,7 +67,7 @@ bool Grafo<V, C>::addArco(const V &u, const V &v, const C &c)
 template <class V, class C>
 bool Grafo<V, C>::addArco(const V &u, const V &v)
 {
-    return addArco(u, v, C{});
+    return this->addArco(u, v, C{});
 }
 
 /**
@@ -82,9 +79,9 @@ bool Grafo<V, C>::addArco(const V &u, const V &v)
 template <class V, class C>
 bool Grafo<V, C>::hayArco(const V &u, const V &v) const
 {
-    typename std::unordered_map<V, std::unordered_map<V, C>>::const_iterator it = grafoMapa.find(u);
+    typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.find(u);
 
-    if (it == grafoMapa.end())
+    if (it == this->grafoMapa.end())
     {
         return false;
     }
@@ -100,12 +97,12 @@ bool Grafo<V, C>::hayArco(const V &u, const V &v) const
  * @return Puntero constante al costo, o nullptr si no existe.
  */
 template <class V, class C>
-const C *Grafo<V, C>::getCosto(const V &u, const V &v) const
+const C Grafo<V, C>::getCosto(const V &u, const V &v) const
 {
     // iterador a la fila (u)
     typename unordered_map<V, unordered_map<V, C>>::const_iterator itU =
-        grafoMapa.find(u);
-    if (itU == grafoMapa.end())
+        this->grafoMapa.find(u);
+    if (itU == this->grafoMapa.end())
         return 0;
 
     // referencia constante a la fila de u
@@ -117,7 +114,7 @@ const C *Grafo<V, C>::getCosto(const V &u, const V &v) const
         return 0; // o nullptr
 
     // devolver puntero al costo almacenado
-    return &(itV->second);
+    return itV->second;
 }
 
 /**
@@ -125,21 +122,29 @@ const C *Grafo<V, C>::getCosto(const V &u, const V &v) const
  * @param v Vértice de referencia.
  * @return Puntero a un arreglo con los vértices adyacentes, o nullptr si no hay adyacencias.
  */
+
 template <class V, class C>
-V *Grafo<V, C>::getAdyacentes(const V &v) const
+list<V> Grafo<V, C>::getAdyacentes(const V &v) const
 {
-    auto x = grafoMapa.find(v);
-    if (grafoMapa.find(v) == grafoMapa.end())
-        return nullptr;
-    const unordered_map<V, C> &ady = x->second;
-    V *destino = new V[ady.size()];
-    int i = 0;
-    for (typename unordered_map<V, C>::const_iterator it = ady.begin(); it != ady.end(); it++)
-    {
-        destino[i] = it->first;
-        i++;
-    }
-    return destino;
+   if (grafoMapa.find(v) == grafoMapa.end())
+       return nullptr;
+   const unordered_map<V, C> &ady = grafoMapa.find(v)->second;
+  list< V> destino;
+   for (typename unordered_map<V, C>::const_iterator it = ady.begin(); it != ady.end(); it++)
+   {
+       destino.push_back(it->first);
+   }
+   return destino;
+}
+
+template <class V, class C>
+list<V> Grafo<V, C>::getVertices() const
+{
+   list<V> v ;
+   for (typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.begin();it != this->grafoMapa.end();it++){
+       v.push_back(it->first); 
+   }
+   return v;
 }
 
 /**
@@ -150,9 +155,8 @@ V *Grafo<V, C>::getAdyacentes(const V &v) const
 template <class V, class C>
 int Grafo<V, C>::getGrado(const V &u) const
 {
-    if (grafoMapa.find(u) == grafoMapa.end())
-        return -1;
-    return grafoMapa.find(u)->second.size();
+    // TODO
+    return this->getGradoSalida(u);
 }
 
 /**
@@ -164,13 +168,10 @@ int Grafo<V, C>::getGrado(const V &u) const
 template <class V, class C>
 int Grafo<V, C>::getGradoSalida(const V &u) const
 {
-    if (!noDirigido)
-    {
-        if (grafoMapa.find(u) == grafoMapa.end())
-            return -1;
-        return grafoMapa.find(u)->second.size();
-    }
-    return -1;
+    //TODO
+    if (this->grafoMapa.find(u) == this->grafoMapa.end())
+        return -1;
+    return this->grafoMapa.find(u)->second.size();
 }
 /**
  * @brief Devuelve la cantidad de vértices actuales del grafo.
@@ -179,7 +180,20 @@ int Grafo<V, C>::getGradoSalida(const V &u) const
 template <class V, class C>
 int Grafo<V, C>::nVertices() const
 {
-    return grafoMapa.size();
+    return this->grafoMapa.size();
+}
+
+template <class V, class C>
+void Grafo<V, C>::imprimir() const
+{
+    for (typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)
+    {
+
+        cout << it->first << ": { ";
+        for (typename unordered_map<V, C>::const_iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
+            cout << it2->first << " ; ";
+        cout << " } \n";
+    }
 }
 
 // ==============================================

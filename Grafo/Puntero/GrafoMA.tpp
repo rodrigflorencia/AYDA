@@ -36,8 +36,8 @@ Grafo<V, C>::Grafo()
     this->noDirigido = false;
     this->grafoMatrizSinArista = -1;
     this->grafoMatrizNVertices = 0;
-    iniciarMatriz();
-    iniciarArreglo();
+    this->iniciarMatriz();
+    this->iniciarArreglo();
 }
 
 /**
@@ -56,8 +56,8 @@ Grafo<V, C>::Grafo(int capacidad_maxima, bool es_no_dirigido)
     if (this->grafoMatrizN <= 0)
         this->grafoMatrizN = 1;
 
-    iniciarMatriz();
-    iniciarArreglo();
+    this->iniciarMatriz();
+    this->iniciarArreglo();
 }
 
 /**
@@ -76,8 +76,8 @@ Grafo<V, C>::Grafo(int capacidad_maxima, bool es_no_dirigido, C sin_arista_val)
     if (this->grafoMatrizN <= 0)
         this->grafoMatrizN = 1;
 
-    iniciarMatriz();
-    iniciarArreglo();
+    this->iniciarMatriz();
+    this->iniciarArreglo();
 }
 
 /**
@@ -118,10 +118,17 @@ int Grafo<V, C>::nVertices() const { return this->grafoMatrizNVertices; }
 template <typename V, typename C>
 int Grafo<V, C>::getClave(const V &v) const
 {
-    for (int i = 0; i < this->grafoMatrizN; i++)
+    bool encontro = false;
+    int i=0;
+    while (i < this->grafoMatrizN && !encontro){
         if (this->grafoMatrizVertices[i] == v)
-            return i;
-    return -1;
+            encontro = true;
+        else 
+            i++;
+    }
+    if (!encontro)
+        i = -1;
+    return i;
 }
 
 // =======================
@@ -167,8 +174,8 @@ bool Grafo<V, C>::addVertice(const V &u)
 template <typename V, typename C>
 bool Grafo<V, C>::addArco(const V &u, const V &v, const C &c)
 {
-    int iU = getClave(u);
-    int iV = getClave(v);
+    int iU = this->getClave(u);
+    int iV = this->getClave(v);
     if (iU != -1 && iV != -1)
     {
 
@@ -193,8 +200,8 @@ bool Grafo<V, C>::addArco(const V &u, const V &v, const C &c)
 template <typename V, typename C>
 bool Grafo<V, C>::delArco(const V &u, const V &v)
 {
-    int iU = getClave(u);
-    int iV = getClave(v);
+    int iU = this->getClave(u);
+    int iV = this->getClave(v);
     if (iU != -1 && iV != -1)
     {
 
@@ -216,8 +223,8 @@ bool Grafo<V, C>::delArco(const V &u, const V &v)
 template <typename V, typename C>
 bool Grafo<V, C>::hayArco(const V &u, const V &v) const
 {
-    int iU = getClave(u);
-    int iV = getClave(v);
+    int iU = this->getClave(u);
+    int iV = this->getClave(v);
     if (iU == -1 || iV == -1)
         return false;
     return !(this->grafoMatriz[iU][iV] == this->grafoMatrizSinArista);
@@ -295,14 +302,17 @@ int Grafo<V, C>::getGradoSalida(const V &u) const
  */
 template <typename V, typename C>
 V *Grafo<V, C>::getAdyacentes(const V &u) const
+
 {
     int key = this->getClave(u);
+    //vector<V> v;
     V *v = new V[this->getGrado(key)];
     int j = 0;
     for (int i = 0; i < this->grafoMatrizN; i++)
     {
         if (this->grafoMatriz[key][i] != this->grafoMatrizSinArista)
         {
+            //v.push_back(this->grafoMatrizVertices[i]);
             v[j] = this->grafoMatrizVertices[i];
             j++;
         }
