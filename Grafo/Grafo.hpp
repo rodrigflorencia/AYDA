@@ -6,6 +6,8 @@
 #include <list>
 /*** */
 
+#include <set> /** para get Vertices y get adyacentes sin puntero */
+
 #include <iostream>
 using namespace std;
 
@@ -28,10 +30,17 @@ public:
     bool addVertice(const V &vertice);
     bool delVertice(const V &vertice);
 
-    V *getVertices() const;
-    int nVertices() const;
-    V *getAdyacentes(const V &vertice) const;
+    
+
     void imprimir() const;
+    int nVertices() const;
+
+    set<V> getVertices() const;
+    set<V> getAdyacentes(const V &vertice) const;
+
+    // V *getVertices() const;
+    // V *getAdyacentes(const V &vertice) const;
+    
     int getGradoSalida(const V &v) const;
     int getGrado(const V &v) const;
 

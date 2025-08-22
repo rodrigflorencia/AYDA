@@ -1,7 +1,7 @@
 /**
  * @file Grafo.tpp
  * @brief Implementación de un grafo con listas enlazadas propias (sin STL para nodos/aristas).
- * 
+ *
  * Representación: cada vértice es un nodo enlazado (lista simple). Cada nodo mantiene
  * una lista enlazada de Arco que representan las adyacencias salientes.
  * Soporta grafos dirigidos y no dirigidos (controlado por @c noDirigido).
@@ -40,7 +40,6 @@ Grafo<TipoVertice, TipoArco>::Grafo()
     this->noDirigido = false; // por defecto se asume dirigido
 }
 
-
 /**
  * @brief Constructor que permite especificar si el grafo es no dirigido.
  *
@@ -58,7 +57,6 @@ Grafo<TipoVertice, TipoArco>::Grafo(bool noDir)
     this->noDirigido = !(!noDir) ? true : false; // asegurar bool
 }
 
-
 /**
  * @brief Destructor. Libera todos los nodos y aristas.
  *
@@ -70,11 +68,14 @@ Grafo<TipoVertice, TipoArco>::Grafo(bool noDir)
  * @complexity O(n + m), n vertices y m aristas
  */
 template <class TipoVertice, class TipoArco>
-Grafo<TipoVertice, TipoArco>::~Grafo() {
+Grafo<TipoVertice, TipoArco>::~Grafo()
+{
     Nodo *tempNodo = grafoNodo;
-    while (tempNodo != nullptr) {
+    while (tempNodo != nullptr)
+    {
         Arco *tempArco = tempNodo->ady;
-        while (tempArco != nullptr) {
+        while (tempArco != nullptr)
+        {
             Arco *arcoAEliminar = tempArco;
             tempArco = tempArco->sig;
             delete arcoAEliminar;
@@ -92,7 +93,6 @@ Grafo<TipoVertice, TipoArco>::~Grafo() {
 // Alta / baja de vértices
 // =======================
 
-
 /**
  * @brief Agrega un nuevo vértice al grafo.
  *
@@ -105,8 +105,10 @@ bool Grafo<TipoVertice, TipoArco>::addVertice(const TipoVertice &o)
 {
     // Verificar duplicado
     Nodo *tmp = this->grafoNodo;
-    while (tmp != nullptr) {
-        if (tmp->etiqueta == o) return false;
+    while (tmp != nullptr)
+    {
+        if (tmp->etiqueta == o)
+            return false;
         tmp = tmp->sig;
     }
 
@@ -118,11 +120,15 @@ bool Grafo<TipoVertice, TipoArco>::addVertice(const TipoVertice &o)
     nuevoNodo->adyacencias = 0;
     nuevoNodo->nodo = this->nV; // índice lógico al momento del alta
 
-    if (this->grafoNodo == nullptr) {
+    if (this->grafoNodo == nullptr)
+    {
         this->grafoNodo = nuevoNodo;
-    } else {
+    }
+    else
+    {
         Nodo *tail = this->grafoNodo;
-        while (tail->sig != nullptr) tail = tail->sig;
+        while (tail->sig != nullptr)
+            tail = tail->sig;
         tail->sig = nuevoNodo;
     }
     this->nV += 1;
@@ -144,32 +150,42 @@ template <class TipoVertice, class TipoArco>
 bool Grafo<TipoVertice, TipoArco>::delVertice(const TipoVertice &vertice)
 {
     // Buscar nodo a borrar y su anterior
-    Nodo* prev = nullptr;
-    Nodo* cur  = this->grafoNodo;
-    while (cur != nullptr && !(cur->etiqueta == vertice)) {
+    Nodo *prev = nullptr;
+    Nodo *cur = this->grafoNodo;
+    while (cur != nullptr && !(cur->etiqueta == vertice))
+    {
         prev = cur;
         cur = cur->sig;
     }
-    if (cur == nullptr) return false; // no existe
+    if (cur == nullptr)
+        return false; // no existe
 
     // Eliminar TODAS las aristas que entran a 'cur' desde otros nodos
-    Nodo* it = this->grafoNodo;
-    while (it != nullptr) {
-        if (it != cur) {
+    Nodo *it = this->grafoNodo;
+    while (it != nullptr)
+    {
+        if (it != cur)
+        {
             // borrar aristas it -> cur
-            Arco* aprev = nullptr;
-            Arco* a = it->ady;
-            while (a != nullptr) {
-                if (a->destino == cur) {
+            Arco *aprev = nullptr;
+            Arco *a = it->ady;
+            while (a != nullptr)
+            {
+                if (a->destino == cur)
+                {
                     // eliminar a
-                    if (aprev == nullptr) it->ady = a->sig;
-                    else aprev->sig = a->sig;
+                    if (aprev == nullptr)
+                        it->ady = a->sig;
+                    else
+                        aprev->sig = a->sig;
                     delete a;
-                    it->adyacencias--; // salió una arista desde 'it'
+                    it->adyacencias--;  // salió una arista desde 'it'
                     cur->incidencias--; // entraba a 'cur'
                     this->nA--;
                     a = (aprev == nullptr) ? it->ady : aprev->sig;
-                } else {
+                }
+                else
+                {
                     aprev = a;
                     a = a->sig;
                 }
@@ -179,9 +195,10 @@ bool Grafo<TipoVertice, TipoArco>::delVertice(const TipoVertice &vertice)
     }
 
     // Eliminar TODAS las aristas que salen de 'cur'
-    Arco* a = cur->ady;
-    while (a != nullptr) {
-        Arco* del = a;
+    Arco *a = cur->ady;
+    while (a != nullptr)
+    {
+        Arco *del = a;
         a = a->sig;
         del->destino->incidencias--; // le quitamos una entrada al destino
         this->nA--;
@@ -191,8 +208,10 @@ bool Grafo<TipoVertice, TipoArco>::delVertice(const TipoVertice &vertice)
     cur->adyacencias = 0;
 
     // Quitar 'cur' de la lista de nodos
-    if (prev == nullptr) this->grafoNodo = cur->sig;
-    else prev->sig = cur->sig;
+    if (prev == nullptr)
+        this->grafoNodo = cur->sig;
+    else
+        prev->sig = cur->sig;
 
     delete cur;
     this->nV--;
@@ -202,7 +221,6 @@ bool Grafo<TipoVertice, TipoArco>::delVertice(const TipoVertice &vertice)
 // =======================
 // Aristas (add / del / query)
 // =======================
-
 
 /**
  * @brief Agrega una arista @c o -> @c d con peso @p peso. En no dirigido, agrega también @c d -> @c o si no existe.
@@ -215,7 +233,7 @@ bool Grafo<TipoVertice, TipoArco>::delVertice(const TipoVertice &vertice)
  * @return true si se agregó; false si no existen los vértices o la arista ya existía.
  * @tparam TipoVertice
  * @tparam TipoArco
- * @complexity O(n) para encontrar el vertice origen entre los n vertices + verificar duplicado (grado(o)) +  insertar cte  
+ * @complexity O(n) para encontrar el vertice origen entre los n vertices + verificar duplicado (grado(o)) +  insertar cte
  * @note En grafo no dirigido suma dos aristas y actualiza contadores en ambos sentidos.
  */
 template <class TipoVertice, class TipoArco>
@@ -223,17 +241,23 @@ bool Grafo<TipoVertice, TipoArco>::addArco(const TipoVertice &o, const TipoVerti
 {
     // Ubicar origen y destino
     Nodo *tempOrigen = this->grafoNodo;
-    while (tempOrigen != nullptr && !(tempOrigen->etiqueta == o)) tempOrigen = tempOrigen->sig;
-    if (tempOrigen == nullptr) return false;
+    while (tempOrigen != nullptr && !(tempOrigen->etiqueta == o))
+        tempOrigen = tempOrigen->sig;
+    if (tempOrigen == nullptr)
+        return false;
 
     Nodo *tempDestino = this->grafoNodo;
-    while (tempDestino != nullptr && !(tempDestino->etiqueta == d)) tempDestino = tempDestino->sig;
-    if (tempDestino == nullptr) return false;
+    while (tempDestino != nullptr && !(tempDestino->etiqueta == d))
+        tempDestino = tempDestino->sig;
+    if (tempDestino == nullptr)
+        return false;
 
     // Verificar si ya existe arco o->d
     Arco *aux = tempOrigen->ady;
-    while (aux != nullptr) {
-        if (aux->destino == tempDestino) return false; // ya existe
+    while (aux != nullptr)
+    {
+        if (aux->destino == tempDestino)
+            return false; // ya existe
         aux = aux->sig;
     }
 
@@ -249,15 +273,21 @@ bool Grafo<TipoVertice, TipoArco>::addArco(const TipoVertice &o, const TipoVerti
     this->nA++;
 
     // Si no dirigido, insertar también d->o si no existe
-    if (this->noDirigido) {
+    if (this->noDirigido)
+    {
         // Verificar si ya existe d->o
         Arco *aux2 = tempDestino->ady;
         bool existe2 = false;
-        while (aux2 != nullptr) {
-            if (aux2->destino == tempOrigen) { existe2 = true; break; }
+        while (aux2 != nullptr && !existe2)
+        {
+            if (aux2->destino == tempOrigen)
+            {
+                existe2 = true;
+            }
             aux2 = aux2->sig;
         }
-        if (!existe2) {
+        if (!existe2)
+        {
             Arco *nuevoArco2 = new Arco;
             nuevoArco2->valor = peso;
             nuevoArco2->destino = tempOrigen;
@@ -270,7 +300,6 @@ bool Grafo<TipoVertice, TipoArco>::addArco(const TipoVertice &o, const TipoVerti
     }
     return true;
 }
-
 
 /**
  * @brief Agrega una arista @c o -> @c d con peso por defecto de @c TipoArco().
@@ -305,54 +334,65 @@ bool Grafo<TipoVertice, TipoArco>::delArco(const TipoVertice &o, const TipoVerti
 {
     // Buscar nodos
     Nodo *origen = this->grafoNodo;
-    while (origen != nullptr && !(origen->etiqueta == o)) origen = origen->sig;
-    if (origen == nullptr) return false;
+    while (origen != nullptr && !(origen->etiqueta == o))
+        origen = origen->sig;
+    if (origen == nullptr)
+        return false;
 
     Nodo *dest = this->grafoNodo;
-    while (dest != nullptr && !(dest->etiqueta == d)) dest = dest->sig;
-    if (dest == nullptr) return false;
+    while (dest != nullptr && !(dest->etiqueta == d))
+        dest = dest->sig;
+    if (dest == nullptr)
+        return false;
 
     bool borrado = false;
 
     // Borrar o->d en lista de 'origen'
-    Arco* aprev = nullptr;
-    Arco* a = origen->ady;
-    while (a != nullptr) {
-        if (a->destino == dest) {
-            if (aprev == nullptr) origen->ady = a->sig;
-            else aprev->sig = a->sig;
+    Arco *aprev = nullptr;
+    Arco *a = origen->ady;
+    while (a != nullptr && !borrado)
+    {
+        if (a->destino == dest)
+        {
+            if (aprev == nullptr)
+                origen->ady = a->sig;
+            else
+                aprev->sig = a->sig;
             delete a;
             origen->adyacencias--;
             dest->incidencias--;
             this->nA--;
             borrado = true;
-            break;
         }
         aprev = a;
         a = a->sig;
     }
 
-    if (!borrado) return false;
-
+    if (!borrado || !noDirigido)
+        return false;
+    borrado = false;
     // Si no dirigido, borrar también d->o
-    if (this->noDirigido) {
-        aprev = nullptr;
-        a = dest->ady;
-        while (a != nullptr) {
-            if (a->destino == origen) {
-                if (aprev == nullptr) dest->ady = a->sig;
-                else aprev->sig = a->sig;
-                delete a;
-                dest->adyacencias--;
-                origen->incidencias--;
-                this->nA--;
-                break;
-            }
-            aprev = a;
-            a = a->sig;
+    aprev = nullptr;
+    a = dest->ady;
+    while (a != nullptr && !borrado)
+    {
+        if (a->destino == origen)
+        {
+            if (aprev == nullptr)
+                dest->ady = a->sig;
+            else
+                aprev->sig = a->sig;
+            delete a;
+            dest->adyacencias--;
+            origen->incidencias--;
+            this->nA--;
+            borrado = true;
         }
+        aprev = a;
+        a = a->sig;
     }
-    return true;
+
+    return borrado;
 }
 
 /**
@@ -369,17 +409,23 @@ template <class TipoVertice, class TipoArco>
 bool Grafo<TipoVertice, TipoArco>::hayArco(const TipoVertice &o, const TipoVertice &d) const
 {
     const Nodo *origen = this->grafoNodo;
-    const Nodo *dest   = this->grafoNodo;
+    const Nodo *dest = this->grafoNodo;
 
-    while (origen != nullptr && !(origen->etiqueta == o)) origen = origen->sig;
-    if (origen == nullptr) return false;
+    while (origen != nullptr && !(origen->etiqueta == o))
+        origen = origen->sig;
+    if (origen == nullptr)
+        return false;
 
-    while (dest != nullptr && !(dest->etiqueta == d)) dest = dest->sig;
-    if (dest == nullptr) return false;
+    while (dest != nullptr && !(dest->etiqueta == d))
+        dest = dest->sig;
+    if (dest == nullptr)
+        return false;
 
-    const Arco* a = origen->ady;
-    while (a != nullptr) {
-        if (a->destino == dest) return true;
+    const Arco *a = origen->ady;
+    while (a != nullptr)
+    {
+        if (a->destino == dest)
+            return true;
         a = a->sig;
     }
     return false;
@@ -398,18 +444,24 @@ bool Grafo<TipoVertice, TipoArco>::hayArco(const TipoVertice &o, const TipoVerti
  * @warning El puntero retornado es válido mientras no se modifique/elimine la arista o el grafo.
  */
 template <class TipoVertice, class TipoArco>
-const TipoArco* Grafo<TipoVertice, TipoArco>::getCosto(const TipoVertice &o,const TipoVertice &d) const
+const TipoArco *Grafo<TipoVertice, TipoArco>::getCosto(const TipoVertice &o, const TipoVertice &d) const
 {
     const Nodo *origen = this->grafoNodo;
-    const Nodo *dest   = this->grafoNodo;
-    while (origen != nullptr && !(origen->etiqueta == o)) origen = origen->sig;
-    if (origen == nullptr) return 0;
-    while (dest != nullptr && !(dest->etiqueta == d)) dest = dest->sig;
-    if (dest == nullptr) return 0;
+    const Nodo *dest = this->grafoNodo;
+    while (origen != nullptr && !(origen->etiqueta == o))
+        origen = origen->sig;
+    if (origen == nullptr)
+        return 0;
+    while (dest != nullptr && !(dest->etiqueta == d))
+        dest = dest->sig;
+    if (dest == nullptr)
+        return 0;
 
-    const Arco* a = origen->ady;
-    while (a != nullptr) {
-        if (a->destino == dest) return &(a->valor);
+    const Arco *a = origen->ady;
+    while (a != nullptr)
+    {
+        if (a->destino == dest)
+            return &(a->valor);
         a = a->sig;
     }
     return 0;
@@ -428,31 +480,42 @@ const TipoArco* Grafo<TipoVertice, TipoArco>::getCosto(const TipoVertice &o,cons
  * @complexity O(n) porque n vertices y grado (n) para la arista
  */
 template <class TipoVertice, class TipoArco>
-void Grafo<TipoVertice, TipoArco>::setCosto(const TipoVertice &o,const TipoVertice &d,const TipoArco &costo)
+void Grafo<TipoVertice, TipoArco>::setCosto(const TipoVertice &o, const TipoVertice &d, const TipoArco &costo)
 {
     Nodo *origen = this->grafoNodo;
-    Nodo *dest   = this->grafoNodo;
-    while (origen != nullptr && !(origen->etiqueta == o)) origen = origen->sig;
-    if (origen == nullptr) return;
-    while (dest != nullptr && !(dest->etiqueta == d)) dest = dest->sig;
-    if (dest == nullptr) return;
+    Nodo *dest = this->grafoNodo;
+    while (origen != nullptr && !(origen->etiqueta == o))
+        origen = origen->sig;
+    if (origen == nullptr)
+        return;
+    while (dest != nullptr && !(dest->etiqueta == d))
+        dest = dest->sig;
+    if (dest == nullptr)
+        return;
 
-    Arco* a = origen->ady;
-    while (a != nullptr) {
-        if (a->destino == dest) {
+    Arco *a = origen->ady;
+    bool corte= false;
+    while (a != nullptr && !corte)
+    {
+        if (a->destino == dest)
+        {
             a->valor = costo;
-            break;
+            corte = true
         }
         a = a->sig;
     }
 
-    if (this->noDirigido) {
+    if (this->noDirigido)
+    {
         // actualizar también d->o si existe
         a = dest->ady;
-        while (a != nullptr) {
-            if (a->destino == origen) {
+        corte= false;
+        while (a != nullptr && !corte)
+        {
+            if (a->destino == origen)
+            {
                 a->valor = costo;
-                break;
+                corte = true
             }
             a = a->sig;
         }
@@ -471,7 +534,8 @@ void Grafo<TipoVertice, TipoArco>::setCosto(const TipoVertice &o,const TipoVerti
  * @complexity O(1)
  */
 template <class TipoVertice, class TipoArco>
-int Grafo<TipoVertice, TipoArco>:: nVertices() const{
+int Grafo<TipoVertice, TipoArco>::nVertices() const
+{
     return this->nV;
 }
 
@@ -492,13 +556,16 @@ template <class TipoVertice, class TipoArco>
 TipoVertice *Grafo<TipoVertice, TipoArco>::getAdyacentes(const TipoVertice &etiqueta) const
 {
     Nodo *temp = this->grafoNodo;
-    while (temp != nullptr && !(temp->etiqueta == etiqueta)) temp = temp->sig;
+    while (temp != nullptr && !(temp->etiqueta == etiqueta))
+        temp = temp->sig;
 
-    if (temp != nullptr && temp->adyacencias > 0) {
+    if (temp != nullptr && temp->adyacencias > 0)
+    {
         TipoVertice *arcos = new TipoVertice[temp->adyacencias];
         int i = 0;
         Arco *aux = temp->ady;
-        while (aux != nullptr) {
+        while (aux != nullptr)
+        {
             arcos[i] = aux->destino->etiqueta;
             aux = aux->sig;
             i++;
@@ -520,16 +587,10 @@ TipoVertice *Grafo<TipoVertice, TipoArco>::getAdyacentes(const TipoVertice &etiq
  * @warning El llamador debe liberar el arreglo con @c delete[].
  */
 template <class TipoVertice, class TipoArco>
-TipoVertice* Grafo<TipoVertice, TipoArco>::getVertices() const
+TipoVertice *Grafo<TipoVertice, TipoArco>::getVertices() const
 {
-    TipoVertice* vertices  = new TipoVertice[this->nV];
-    int i = 0;
-    Nodo *temp = this->grafoNodo;
-    while (temp != nullptr) {
-        vertices[i++] = temp->etiqueta;
-        temp = temp->sig;
-    }
-    return vertices;
+    /** HACER* */
+    return -1;
 }
 
 /**
@@ -544,16 +605,18 @@ TipoVertice* Grafo<TipoVertice, TipoArco>::getVertices() const
  * @complexity O() para ubicar el nodo + O(1) para leer el contador.
  */
 template <class TipoVertice, class TipoArco>
-int Grafo<TipoVertice, TipoArco>::getGradoSalida(const TipoVertice& v) const
+int Grafo<TipoVertice, TipoArco>::getGradoSalida(const TipoVertice &v) const
 {
-    const Nodo* temp = this->grafoNodo;
-    while (temp != nullptr && !(temp->etiqueta == v)) temp = temp->sig;
-    if (temp == nullptr) return 0;
+    const Nodo *temp = this->grafoNodo;
+    while (temp != nullptr && !(temp->etiqueta == v))
+        temp = temp->sig;
+    if (temp == nullptr)
+        return 0;
     return temp->adyacencias; // out-degree; en no-dirigido coincide con grado
 }
 
 /**
- * @brief Imprime por @c std::cout la lista de adyacencia y un resumen del grafo.
+ * @brief Imprime por pantalla la lista de adyacencia y un resumen del grafo.
  *
  * Formato: por cada vértice, imprime sus aristas salientes como "u -> v [peso]".
  *
@@ -564,20 +627,23 @@ int Grafo<TipoVertice, TipoArco>::getGradoSalida(const TipoVertice& v) const
 template <class TipoVertice, class TipoArco>
 void Grafo<TipoVertice, TipoArco>::imprimir() const
 {
-    const Nodo* u = this->grafoNodo;
-    while (u != nullptr) {
-        std::cout << u->etiqueta << " :";
-        const Arco* a = u->ady;
-        if (a == nullptr) std::cout << " (sin adyacentes)";
-        while (a != nullptr) {
-            std::cout << " -> " << a->destino->etiqueta << " [" << a->valor << "]";
+    const Nodo *u = this->grafoNodo;
+    while (u != nullptr)
+    {
+        cout << u->etiqueta << " :";
+        const Arco *a = u->ady;
+        if (a == nullptr)
+            cout << " (sin adyacentes)";
+        while (a != nullptr)
+        {
+            cout << " -> " << a->destino->etiqueta << " [" << a->valor << "]";
             a = a->sig;
         }
-        std::cout << "\n";
+        cout << "\n";
         u = u->sig;
     }
-    std::cout << "Vértices: " << this->nV << " | Aristas almacenadas: " << this->nA
-              << (this->noDirigido ? " (no dirigido)\n" : " (dirigido)\n");
+    cout << "Vértices: " << this->nV << " | Aristas almacenadas: " << this->nA
+         << (this->noDirigido ? " (no dirigido)\n" : " (dirigido)\n");
 }
 
 // =======================
