@@ -126,28 +126,28 @@ const C *Grafo<V, C>::getCosto(const V &u, const V &v) const
  * @return Puntero a un arreglo con los vértices adyacentes, o nullptr si no hay adyacencias.
  */
 template <class V, class C>
-set<V> Grafo<V, C>::getAdyacentes(const V &v) const
+vector<V> Grafo<V, C>::getAdyacentes(const V &v) const
 {
     typename unordered_map<V, C>::const_iterator x = this->grafoMapa.find(v);
     if (this->grafoMapa.find(v) == this->grafoMapa.end())
         return nullptr;
     const unordered_map<V, C> &ady = x->second;
-    set<V> destino;
+    vector<V> destino;
     int i = 0;
     for (typename unordered_map<V, C>::const_iterator it = ady.begin(); it != ady.end(); it++)
     {
-        v.add(it->first);
+        v.push_back(it->first);
     }
     return destino;
 }
 template <class V, class C>
-set<V> Grafo<V, C>::getVertices() const
+vector<V> Grafo<V, C>::getVertices() const
 {
-    set<V> v;
+    vector<V> v;
     int i = 0;
     for (typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)
     {
-        v.add(it->first);
+        v.push_back(it->first);
     }
     return v;
 }
@@ -155,7 +155,7 @@ set<V> Grafo<V, C>::getVertices() const
 template <class V, class C>
 V *Grafo<V, C>::getAdyacentes(const V &v) const
 {
-   auto x = grafoMapa.find(v);
+   typename unordered_map<V, unordered_map<V, C>>::const_iterator x = grafoMapa.find(v);
    if (grafoMapa.find(v) == grafoMapa.end())
        return nullptr;
    const unordered_map<V, C> &ady = x->second;

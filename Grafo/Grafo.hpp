@@ -6,7 +6,7 @@
 #include <list>
 /*** */
 
-#include <set> /** para get Vertices y get adyacentes sin puntero */
+#include <vector> /** para get Vertices y get adyacentes sin puntero */
 
 #include <iostream>
 using namespace std;
@@ -35,8 +35,8 @@ public:
     void imprimir() const;
     int nVertices() const;
 
-    set<V> getVertices() const;
-    set<V> getAdyacentes(const V &vertice) const;
+    vector<V> getVertices() const;
+    vector<V> getAdyacentes(const V &vertice) const;
 
     // V *getVertices() const;
     // V *getAdyacentes(const V &vertice) const;

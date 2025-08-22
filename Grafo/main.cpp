@@ -1,10 +1,10 @@
-#include "GrafoLA.tpp"
+#include "GrafoLAM.tpp"
 #include <iostream>
 #include "dfs.hpp"
 using namespace std;
 int main()
 {
-  Grafo<char, int> g(true);
+  Grafo<char, int> g;
 
   g.addVertice('A');
   g.addVertice('B');
@@ -23,8 +23,10 @@ int main()
 dfsForestArcos(g);      // clasificación de arcos
     dfsForestSimple(g);     // recorrido/orden
 
-    bool ciclo = hayCicloSimple(g);
-    std::cout << "Hay ciclo? " << (ciclo ? "si" : "no") << "\n";
+    //bool ciclo = hayCicloSimple(g);
+    //std::cout << "Hay ciclo? " << (ciclo ? "si" : "no") << "\n";
 
   return 0;
+
+  
 }
