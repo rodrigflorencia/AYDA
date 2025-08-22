@@ -73,11 +73,11 @@ De forma general, podemos representar un grafo con una [matriz de adyacencias](G
 
 Matriz de adyacencias. Grafo dirigido
 
-![alt text](image.png)
+![alt text](img/image.png)
 
 Lista de adyacencias 
 
-![alt text](image-4.png)![alt text](image-2.png)
+![alt text](img/image-4.png)![alt text](img/image-2.png)
 
 
 
@@ -109,7 +109,7 @@ B: { }
 Ventaja: ocupa menos memoria que la matriz.
 Desventaja: complejidad lineal para consulta de arcos
 
-Una mejora consiste en usar un [mapa](GrafoLAM.tpp)
+Una mejora consiste en usar un [mapa](img/GrafoLAM.tpp)
 
 ```
 {
