@@ -5,7 +5,7 @@
 #include <list>
 #include <vector>
 #include <utility>
-#include "Grafo.hpp"
+#include "Grafo.tpp"
 
 using namespace std;
 

@@ -294,21 +294,20 @@ int Grafo<V, C>::getGradoSalida(const V &u) const
  * @complexity O(nVertices) + O(N). El llamador debe liberar con delete[].
  */
 template <typename V, typename C>
-vector<V> Grafo<V, C>::getAdyacentes(const V &u) const
-// V *Grafo<V, C>::getAdyacentes(const V &u) const
+V *Grafo<V, C>::getAdyacentes(const V &u) const
 
 {
     int key = this->getClave(u);
-    vector<V> v;
-    //V *v = new V[this->getGrado(key)];
-    //int j = 0;
+    //vector<V> v;
+    V *v = new V[this->getGrado(key)];
+    int j = 0;
     for (int i = 0; i < this->grafoMatrizN; i++)
     {
         if (this->grafoMatriz[key][i] != this->grafoMatrizSinArista)
         {
-            v.push_back(this->grafoMatrizVertices[i]);
-            //v[j] = this->grafoMatrizVertices[i];
-            //j++;
+            //v.push_back(this->grafoMatrizVertices[i]);
+            v[j] = this->grafoMatrizVertices[i];
+            j++;
         }
     }
     return v;

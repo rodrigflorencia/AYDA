@@ -1,4 +1,4 @@
-#include "Grafo.hpp"
+#include "dfs.hpp"
 
 using namespace std;
 int main()
@@ -18,5 +18,13 @@ int main()
   cout << "Hay C-B? " << g.hayArco('C', 'B') << "\n";
   cout << "Peso A-C = " << *(g.getCosto('A', 'C')) << "\n";
 
+  dfsForestArcos(g);      // clasificación de arcos
+  dfsForestSimple(g);     // recorrido/orden
+
+  bool ciclo = hayCicloSimple(g);
+  cout << "Hay ciclo? " << (ciclo ? "si" : "no") << "\n";
+
   return 0;
+
+  
 }

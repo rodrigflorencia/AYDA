@@ -553,12 +553,9 @@ int Grafo<TipoVertice, TipoArco>::nVertices() const
  * @warning El llamador debe liberar el arreglo con @c delete[].
  */
 template <class TipoVertice, class TipoArco>
-vector<TipoVertice> Grafo<TipoVertice, TipoArco>::getAdyacentes(const TipoVertice &etiqueta) const
+TipoVertice* Grafo<TipoVertice, TipoArco>::getAdyacentes(const TipoVertice &etiqueta) const
 {
-    // TODO
-    /** HACER* */
-    vector<TipoVertice> out;
-    return out;/** /
+    
     Nodo *temp = this->grafoNodo;
     while (temp != nullptr && !(temp->etiqueta == etiqueta))
         temp = temp->sig;
@@ -576,7 +573,7 @@ vector<TipoVertice> Grafo<TipoVertice, TipoArco>::getAdyacentes(const TipoVertic
         }
         return arcos;
     }
-    return nullptr;*/
+    return nullptr;
 }
 
 /**
@@ -591,13 +588,11 @@ vector<TipoVertice> Grafo<TipoVertice, TipoArco>::getAdyacentes(const TipoVertic
  * @warning El llamador debe liberar el arreglo con @c delete[].
  */
 template <class TipoVertice, class TipoArco>
-vector<TipoVertice> Grafo<TipoVertice, TipoArco>::getVertices() const
+TipoVertice* Grafo<TipoVertice, TipoArco>::getVertices() const
 //TipoVertice *Grafo<TipoVertice, TipoArco>::getVertices() const
 {
     // TODO
-    /** HACER* */
-    vector<TipoVertice> out;
-    return out;
+    return nullptr;
 }
 
 /**

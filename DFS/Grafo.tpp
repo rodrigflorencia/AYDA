@@ -125,7 +125,33 @@ const C *Grafo<V, C>::getCosto(const V &u, const V &v) const
  * @param v Vértice de referencia.
  * @return Puntero a un arreglo con los vértices adyacentes, o nullptr si no hay adyacencias.
  */
-
+template <class V, class C>
+vector<V> Grafo<V, C>::getAdyacentes(const V &v) const
+{
+    typename unordered_map<V, C>::const_iterator x = this->grafoMapa.find(v);
+    if (this->grafoMapa.find(v) == this->grafoMapa.end())
+        return nullptr;
+    const unordered_map<V, C> &ady = x->second;
+    vector<V> destino;
+    int i = 0;
+    for (typename unordered_map<V, C>::const_iterator it = ady.begin(); it != ady.end(); it++)
+    {
+        v.push_back(it->first);
+    }
+    return destino;
+}
+template <class V, class C>
+vector<V> Grafo<V, C>::getVertices() const
+{
+    vector<V> v;
+    int i = 0;
+    for (typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)
+    {
+        v.push_back(it->first);
+    }
+    return v;
+}
+/**
 template <class V, class C>
 V *Grafo<V, C>::getAdyacentes(const V &v) const
 {
@@ -154,7 +180,7 @@ V* Grafo<V, C>::getVertices() const
    return v;
 
 }
-
+***/
 
 /**
  * @brief Devuelve el grado (cantidad de adyacencias) de un vértice.
