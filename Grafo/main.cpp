@@ -1,4 +1,4 @@
-#include "dfs.tpp"
+#include "dfs.hpp"
 
 using namespace std;
 int main()
