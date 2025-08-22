@@ -118,10 +118,17 @@ int Grafo<V, C>::nVertices() const { return this->grafoMatrizNVertices; }
 template <typename V, typename C>
 int Grafo<V, C>::getClave(const V &v) const
 {
-    for (int i = 0; i < this->grafoMatrizN; i++)
+    bool encontro = false;
+    int i=0;
+    while (i < this->grafoMatrizN && !encontro){
         if (this->grafoMatrizVertices[i] == v)
-            return i;
-    return -1;
+            encontro = true;
+        else 
+            i++;
+    }
+    if (!encontro)
+        i = -1;
+    return i;
 }
 
 // =======================

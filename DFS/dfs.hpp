@@ -1,112 +1,88 @@
+/****
+ * Métodos válidos para Grafos con vértices numerados consecutivamente de 0 a N
+ */
 #ifndef DFS_H_
 #define DFS_H_
 
 #include <iostream>
 #include <list>
-#include <vector>
 #include <utility>
-#include "Grafo.tpp"
+#include "Grafo.hpp"
 
 using namespace std;
 
 enum ClaseArco { TREE, BACK, CROSS, FORWARD };
 enum Estado    { NOVISITADO, VISITADO, COMPLETO };
 
-using Arco            = pair<int,int>;
-using ArcoClasificado = pair<ClaseArco, Arco>;
+using Arco            = std::pair<int,int>;
+using ArcoClasificado = std::pair<ClaseArco, Arco>;
 
-// =======================
-// Helpers
-// =======================
-
-template <class TipoVertice>
-int getVertice(const TipoVertice* vertices, const TipoVertice& v, int n) {
-    int i =0;
-    bool encontrado = false;
-    while ( i < n && !encontrado) {
-        if (vertices[i] == v) {
-            encontrado=true;
-        }
-        else {
-            i++;
-        }
-    }
-    return -1;
-}
 
 // =======================
 // DFS (clasificación de arcos)
 // =======================
-
-template <class TV, class TA>
-void dfsVisitArcos(const Grafo<TV,TA>& g, int v,
+void dfsVisitArcos(const Grafo<int>& g, int v,
                    list<ArcoClasificado>& listaArcos,
                    int& tiempo,
                    Estado* estado,
-                   int* descubrimiento,
-                   const TV* vertices)
+                   int* descubrimiento)
 {
     tiempo++;
     descubrimiento[v] = tiempo;
     estado[v] = VISITADO;
 
-    vectorzTV> ady = g.getAdyacentes(vertices[v]);
-    int nAdy = g.getGrado(vertices[v]);
+    set<int> ady = g.getAdyacentes(v);
 
-    for (int i = 0; i < nAdy; ++i) {
-        int u = getVertice(vertices, ady[i], g.nVertices());
-        if (u < 0)  {
-        if (estado[u] == NOVISITADO) {
-            listaArcos.push_back({TREE, {v,u}});
-            dfsVisitArcos(g, u, listaArcos, tiempo, estado, descubrimiento, vertices);
+    for (set<int>::const_iterator u = ady.begin(); u !=ady.end(); u++) {
+
+        if (estado[*u] == NOVISITADO) {
+            listaArcos.push_back({TREE, {v,*u}});
+            dfsVisitArcos(g, *u, listaArcos, tiempo, estado, descubrimiento);
         } else {
-            if (estado[u] == VISITADO) {
-                listaArcos.push_back({BACK, {v,u}});
+            if (estado[*u] == VISITADO) {
+                listaArcos.push_back({BACK, {v,*u}});
             } else {
                 // COMPLETO: FORWARD o CROSS según tiempos
-                if (descubrimiento[v] < descubrimiento[u]) {
-                    listaArcos.push_back({FORWARD, {v,u}});
+                if (descubrimiento[v] < descubrimiento[*u]) {
+                    listaArcos.push_back({FORWARD, {v,*u}});
                 } else {
-                    listaArcos.push_back({CROSS, {v,u}});
+                    listaArcos.push_back({CROSS, {v,*u}});
                 }
             }
-        }}
+        }
     }
 
-    delete[] ady;
     estado[v] = COMPLETO;
 }
 
-template <class TV, class TA>
-void dfsForestArcos(const Grafo<TV,TA>& g)
+void dfsForestArcos(const Grafo<int>& g)
 {
     const int n = g.nVertices();
     list<ArcoClasificado> listaArcos;
-
-    vector<TV> vertices = g.getVertices();
+    set<int> vertices = g.getVertices();
     Estado* estado = new Estado[n];
     int* descubrimiento = new int[n];
 
-    for (int i = 0; i < n; ++i) {
-        estado[i] = NOVISITADO;
-        descubrimiento[i] = -1;
+    for (set<int>::const_iterator i = vertices.begin(); i !=vertices.end(); i++) {
+        estado[*i] = NOVISITADO;
+        descubrimiento[*i] = -1;
     }
     int tiempo = 0;
 
     for (int v = 0; v < n; ++v) {
         if (estado[v] == NOVISITADO) {
-            dfsVisitArcos(g, v, listaArcos, tiempo, estado, descubrimiento, vertices);
+            dfsVisitArcos(g, v, listaArcos, tiempo, estado, descubrimiento);
         }
     }
 
     cout << "Referencias\n0: TREE\n1: BACK\n2: CROSS\n3: FORWARD\n\n";
-    for (typename list<ArcoClasificado>::const_iterator par : listaArcos) {
-        cout << "Tipo: " << par.first
-                  << ", Arco: " << vertices[par.second.first]
-                  << " -> "  << vertices[par.second.second] << "\n";
+      for (list<ArcoClasificado>::iterator par= listaArcos.begin();listaArcos.end()!=par;par++) {
+        cout << "Tipo: " << par->first
+                  << ", Arco: " << par->second.first
+                  << " -> "  << par->second.second << "\n";
     }
 
-   
+
     delete[] descubrimiento;
     delete[] estado;
 }
@@ -115,92 +91,82 @@ void dfsForestArcos(const Grafo<TV,TA>& g)
 // DFS simple (orden y padres)
 // =======================
 
-template <class TV, class TA>
-void dfsVisitSimple(const Grafo<TV,TA>& g, int v,
-                    Estado* estado, int* padres, list<int>& orden,
-                    const TV* vertices)
+template <class TV>
+void dfsVisitSimple(const Grafo<TV>& g, int v,
+                    set<int> &visitados, list<int>& orden)
 {
-    estado[v] = VISITADO;
+    visitados.insert(v);
 
-    vector<TV> ady = g.getAdyacentes(vertices[v]);
-    int nAdy = g.getGrado(vertices[v]);
+    set<int> ady = g.getAdyacentes(v);
 
-    for (int i = 0; i < nAdy; ++i) {
-        int u = getVertice(vertices, ady[i], g.nVertices());
-        if (u >= 0 && estado[u] == NOVISITADO) {
-            padres[u] = v;
-            dfsVisitSimple(g, u, estado, padres, orden, vertices);
+    for (set<int>::const_iterator u = ady.begin(); u !=ady.end(); u++) {
+
+        if (visitados.find(*u)==visitados.end()) {
+
+            dfsVisitSimple(g, *u, visitados, orden);
         }
     }
-
     orden.push_back(v);
 }
 
 template <class TV, class TA>
-void dfsForestSimple(const Grafo<TV,TA>& g)
+void dfsForestSimple(const Grafo<TV>& g)
 {
     const int n = g.nVertices();
-    Estado* estado = new Estado[n];
-    int* padres = new int[n];
+    set<int> estado ;
+
     list<int> orden;
-    vector<TV> vertices =g.getVertices();
+    set<int> vertices = g.getVertices();
 
-    for (int i = 0; i < n; ++i) {
-        estado[i] = NOVISITADO;
-        padres[i] = -1;
+
+    for (set<int>::const_iterator v = vertices.begin(); v !=vertices.end(); v++) {
+        if (estado.find(*v)!=estado.end())
+            dfsVisitSimple(g, v, estado, orden);
     }
 
-    for (int v = 0; v < n; ++v) {
-        if (estado[v] == NOVISITADO)
-            dfsVisitSimple(g, v, estado, padres, orden, vertices);
-    }
 
-    cout << "\nRecorrido DFS (post-orden por finalización):\n";
-    for (int idx : orden) {
-        if (padres[idx] != -1)
-            cout << vertices[padres[idx]] << " -> ";
-        cout << vertices[idx] << "\n";
-    }
-
-    delete[] padres;
-    delete[] estado;
 }
 
 // =======================
 // Detección de ciclo simple (en dirigidos)
 // =======================
 
-template <class TV, class TA>
-bool dfsCicloVisit(const Grafo<TV,TA>& g, int v, Estado* estado, const TV* vertices)
+template <class TV>
+bool dfsCicloVisit(const Grafo<TV>& g, int v, Estado* estado)
 {
     estado[v] = VISITADO;
 
-    vector<TV> ady = g.getAdyacentes(vertices[v]);
-    int nAdy = g.getGrado(vertices[v]);
+    set<int> ady = g.getAdyacentes(v);
 
     bool ciclo = false;
-    for (int i = 0; i < nAdy && !ciclo; ++i) {
-        int u = getVertice(vertices, ady[i], g.nVertices());
-        if (u >= 0) {
-        if (estado[u] == VISITADO) ciclo = true;          // back-edge
-        else if (estado[u] == NOVISITADO) ciclo = dfsCicloVisit(g, u, estado, vertices);
-    }}
+  set<int>::const_iterator u = ady.begin();
+         while( u !=ady.end() && !ciclo) {
+
+
+        if (estado[*u] == VISITADO) ciclo = true;          // back-edge
+        else if (estado[*u] == NOVISITADO) ciclo = dfsCicloVisit(g, *u, estado);
+            u++;
+    }
+
 
     estado[v] = COMPLETO;
     return ciclo;
 }
 
-template <class TV, class TA>
-bool hayCicloSimple(const Grafo<TV,TA>& g)
+template <class TV>
+bool hayCicloSimple(const Grafo<TV>& g)
 {
     const int n = g.nVertices();
-    vector<TV> vertices = g.getVertices();
+    set<TV> vertices = g.getVertices();
+
     Estado* estado = new Estado[n];
-    for (int i = 0; i < n; ++i) estado[i] = NOVISITADO;
+     for (set<int>::const_iterator v = vertices.begin(); v !=vertices.end(); v++) estado[*v] = NOVISITADO;
 
     bool ciclo = false;
-    for (int v = 0; v < n && !ciclo; ++v) {
-        if (estado[v] == NOVISITADO) ciclo = dfsCicloVisit(g, v, estado, vertices);
+  set<int>::const_iterator v = vertices.begin();
+         while( v !=vertices.end() && !ciclo) {
+        if (estado[*v] == NOVISITADO) ciclo = dfsCicloVisit(g, *v, estado);
+        v++;
     }
 
     delete[] estado;

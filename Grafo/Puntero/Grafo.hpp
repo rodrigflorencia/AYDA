@@ -1,11 +1,6 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
-//***Librerías para la implementación con mapas */
-#include <unordered_map>
-#include <list>
-/*** */
-
 #include <iostream>
 using namespace std;
 
@@ -45,10 +40,6 @@ private:
     
     bool noDirigido; // No se hace esto de usar un flag para GD/GND según objetos. Deberíamos tener una clase Grafo y dos clases hijas GD y GND, pero será en el próximo cuatrimestre.
 
-    /* *Estructuras para la lista de adyacencias con mapa de mapa** */
-    unordered_map<V, unordered_map<V, C>> grafoMapa;
-    /**** */
-    
     /* *Estructuras para la lista de adyacencias con puntero** */
     struct Arco;
     struct Nodo

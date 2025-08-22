@@ -1,30 +1,27 @@
+#include <iostream>
+#include "Grafo.tpp"
 #include "dfs.hpp"
-
-using namespace std;
 int main()
 {
-  Grafo<char, int> g;
+  Grafo<int> g;
 
-  g.addVertice('A');
-  g.addVertice('B');
+  g.addVertice(1);
+  g.addVertice(2);
+  g.addVertice(3);
+  g.addVertice(2);
+  g.addVertice(4);
+  g.addVertice(4);
 
-  g.addVertice('C');
-  g.addVertice('D');
+  g.addArco(0, 3);
+  g.addArco(0, 1);
+  g.addArco(2, 3);
+  g.addArco(2, 0);
+  g.addArco(1, 4);
+  g.addArco(2, 4);
 
-  g.addArco('A', 'B', 7);
-  g.addArco('A', 'C', 5);
-
-  cout << "Hay A-B? " << g.hayArco('A', 'B') << "\n";
-  cout << "Hay C-B? " << g.hayArco('C', 'B') << "\n";
-  cout << "Peso A-C = " << *(g.getCosto('A', 'C')) << "\n";
-
-  dfsForestArcos(g);      // clasificación de arcos
-  dfsForestSimple(g);     // recorrido/orden
-
-  bool ciclo = hayCicloSimple(g);
-  cout << "Hay ciclo? " << (ciclo ? "si" : "no") << "\n";
+  cout << g;
+  dfsForestArcos(g);
+  cout << hayCicloSimple(g);
 
   return 0;
-
-  
 }
