@@ -1,0 +1,8 @@
+modules = ["cpp-clang14"]
+run = "g++ -o main Grafo/STL/main.cpp && ./main"
+
+[nix]
+channel = "stable-25_05"
+
+[deployment]
+run = ["sh", "-c", "g++ -o main Grafo/STL/main.cpp && ./main"]

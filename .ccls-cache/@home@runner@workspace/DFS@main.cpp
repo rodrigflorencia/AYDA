@@ -1,7 +1,8 @@
-#include "DFS/dfs.hpp"
+#include <iostream>
 #include "Grafo.tpp"
-
-int main() {
+#include "dfs.hpp"
+int main()
+{
   Grafo<int> g;
 
   g.addVertice(1);
