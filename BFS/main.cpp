@@ -1,4 +1,4 @@
-#include "Grafo.tpp"
+#include "Grafo/Grafo.tpp"
 #include "redSocial.hpp"
 
 int main()
