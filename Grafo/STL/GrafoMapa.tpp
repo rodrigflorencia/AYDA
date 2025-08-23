@@ -3,7 +3,7 @@
 
 /**
  * @brief Implementación de un grafo genérico utilizando lista de adyacencias 
- * y la estructura base mapa de mapa.
+ * y la estructura base mapa.
  * @tparam V Tipo de dato para los vértices.
  */
 template <class V>

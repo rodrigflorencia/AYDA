@@ -85,7 +85,7 @@ private:
                    // GND, pero será en el próximo cuatrimestre.
                    // Igual, OJO con las implementaciones, estén atentos a esto.
 
-  map<V, set<V>> grafoMapa; // Estructura válida para el mapa de mapa.
+  map<V, set<V>> grafoMapa; // Estructura válida para el mapa.
 
   /** Estructuras para la implementación con lista de adyacencias**/
   vector<list<int>>
