@@ -135,9 +135,8 @@ int redSocial() {
 }
 
 int main() {
-  grafoRotulado();
-  grafo();
-  grafoPuntero();
+  dfs();
+  redSocial();
 
   return 0;
 }
