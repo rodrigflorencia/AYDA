@@ -3,8 +3,8 @@
  * Implementación grafo rótulado.
  * Soporta grafo dirigido y no dirigido.
  **/
-#ifndef GRAFO_H
-#define GRAFO_H
+#ifndef GRAFOROTULADO_H
+#define GRAFOROTULADO_H
 
 #include <list>
 #include <map>
@@ -12,11 +12,11 @@
 #include <iostream>
 using namespace std;
 
-template <class V, class C> class Grafo {
+template <class V, class C> class GrafoRotulado {
 public:
-  Grafo(); // por defecto se asume dirigido
-  virtual ~Grafo();
-  Grafo(bool noDirigido);
+  GrafoRotulado(); // por defecto se asume dirigido
+  virtual ~GrafoRotulado();
+  GrafoRotulado(bool noDirigido);
 
   void addArco(const V &deVertice, const V &aVertice, const C &c);
   void addArco(const V &deVertice, const V &aVertice);
@@ -35,7 +35,7 @@ public:
   list<V> getAdyacentes(const V &vertice) const;
 
   // Lo más adecuado es escribir este método en otro archivo
-  friend ostream &operator<<(ostream &os, const Grafo &g) {
+  friend ostream &operator<<(ostream &os, const GrafoRotulado &g) {
     for (typename map<V, map<V, C>>::const_iterator it = g.grafoMapa.begin();
          it != g.grafoMapa.end(); it++) {
 

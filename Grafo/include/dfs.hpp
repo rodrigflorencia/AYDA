@@ -4,7 +4,7 @@
 #ifndef DFS_H_
 #define DFS_H_
 
-#include "Grafo/Grafo.hpp"
+#include "mapa/Grafo.hpp"
 #include <iostream>
 #include <list>
 #include <utility>
