@@ -1,7 +1,7 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
-#include <unordered_map>
+#include <map>
 #include <list>
 
 #include <iostream>
@@ -41,7 +41,7 @@ private:
     
     bool noDirigido; // No se hace esto de usar un flag para GD/GND según objetos. Deberíamos tener una clase Grafo y dos clases hijas GD y GND, pero será en el próximo cuatrimestre.
 
-    unordered_map<V, unordered_map<V, C>> grafoMapa;
+    map<V, map<V, C>> grafoMapa;
  
 };
 
