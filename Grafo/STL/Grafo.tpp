@@ -2,7 +2,7 @@
 #include "Grafo.hpp"
 
 /**
- * @brief Implementación de un grafo genérico utilizando lista de adyacencias con nordered_mapny set.
+ * @brief Implementación de un grafo genérico utilizando lista de adyacencias con nordered_mapny set. O(1)
  * @tparam V Tipo de dato para los vértices.
  * @tparam C Tipo de dato para los costos/pesos de las aristas.
  */
@@ -14,7 +14,7 @@ Grafo<V>::Grafo()
 
 /**
  * @brief Destructor. Actualmente no es necesario porque usamos unordered_map, que maneja su propia memoria.
- * Aunque podemos hacer clear que tiene una complejidad lineal del tamaño de la estructura.
+ * Aunque podemos hacer clear. O(n) complejidad lineal del tamaño de la estructura.
  */
 template <class V>
 Grafo<V>::~Grafo()
@@ -23,24 +23,24 @@ Grafo<V>::~Grafo()
 }
 
 /**
- * @brief Constructor con parámetro para definir si el grafo es dirigido o no.
+ * @brief Constructor con parámetro para definir si el grafo es dirigido o no. O(1)
  * @param noDirigido Indica si el grafo es no dirigido.
  */
 template <class V>
 Grafo<V>::Grafo(bool noDirigido)
 {
-    noDirigido = noDirigido;
+    this->noDirigido = noDirigido;
 }
 
 /**
- * @brief Agrega un vértice al grafo. La complejidad es del orden logaritmico.
+ * @brief Agrega un vértice al grafo. La complejidad es O(log n)
  * @param v Vértice a agregar.
  * @return true si el vértice se agrega, false si ya existía.
  */
 template <class V>
 bool Grafo<V>::addVertice(const V &v)
 {
-    grafoMapa.insert({v, set<V>{}});
+    this->grafoMapa.insert({v, set<V>{}}); // el constructor vacio del set es O(1)
     return true;
 }
 
@@ -62,7 +62,7 @@ bool Grafo<V>::addArco(const V &u, const V &v)
 }
 
 /**
- * @brief Verifica si existe un arco entre dos vértices. Costo computacional logaritmico
+ * @brief Verifica si existe un arco entre dos vértices. Costo computacional logaritmico O(log n)
  * @param u Vértice origen.
  * @param v Vértice destino.
  * @return true si existe, false si no.
@@ -70,7 +70,7 @@ bool Grafo<V>::addArco(const V &u, const V &v)
 template <class V>
 bool Grafo<V>::hayArco(const V &u, const V &v) const
 {
-    typename unordered_map<V, set<V>>::const_iterator it = grafoMapa.find(u);
+    typename map<V, set<V>>::const_iterator it = grafoMapa.find(u); // O(log n)
 
     if (it == grafoMapa.end())
     {
@@ -82,16 +82,16 @@ bool Grafo<V>::hayArco(const V &u, const V &v) const
 }
 
 /**
- * @brief Devuelve un conjunto con los adyacentes de un vértice. Costo logaritmico.
+ * @brief Devuelve un conjunto con los adyacentes de un vértice. Costo logaritmico O(log n).
  * @param v Vértice de referencia.
  * @return Puntero a un arreglo con los vértices adyacentes, o nullptr si no hay adyacencias.
  */
 template <class V>
 set<V> Grafo<V>::getAdyacentes(const V &v) const
 {
-    if (grafoMapa.find(v) == grafoMapa.end())
-        return set<V>();
-    return grafoMapa.find(v)->second;
+    if (grafoMapa.find(v) == grafoMapa.end()) //O(log n)
+        return set<V>(); //O(1)
+    return grafoMapa.find(v)->second; //O(log n)
 }
 
 /**
@@ -107,7 +107,7 @@ int Grafo<V>::getGrado(const V &u) const
 }
 
 /**
- * @brief Devuelve un conjunto con los vértices del grafo. Costo lineal
+ * @brief Devuelve un conjunto con los vértices del grafo. Costo lineal O(n)
  * @param u Vértice de referencia.
  * @return Cantidad de vértices adyacentes, o -1 si el vértice no existe.
  */
@@ -116,7 +116,7 @@ set<V> Grafo<V>::getVertices() const
 {
     set<V> v;
     int i=0;
-    for (typename unordered_map<V, set<V>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)       
+    for (typename map<V, set<V>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)       
      v.insert(it->first);
     return v;
 
@@ -132,20 +132,19 @@ set<V> Grafo<V>::getVertices() const
 template <class V>
 int Grafo<V>::getGradoSalida(const V &u) const
 {
-    if (grafoMapa.find(u) == grafoMapa.end())
-        return -1;
-    return grafoMapa.find(u)->second.size();
+    // TODO
+return -1;
 
 }
 
 /**
- * @brief Devuelve la cantidad de vértices actuales del grafo.
+ * @brief Devuelve la cantidad de vértices actuales del grafo. O(1)
  * @return Número de vértices.
  */
 template <class V>
 int Grafo<V>::nVertices() const
 {
-    return grafoMapa.size();
+    return grafoMapa.size(); // O(1)
 }
 
 // ==============================================
