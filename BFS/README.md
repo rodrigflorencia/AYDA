@@ -6,3 +6,5 @@ Diseñar e implementar un algoritmo que recomiende cuentas que puede llegar a in
 - V sigue a alguien (W) que sigue a X
 
 Proponer un algoritmo. Detallar y justificar la complejidad algoritmica.
+
+[Enlace](https://docs.google.com/presentation/d/1Vg2iaw6ReFesm8Y9lWVmOHGchKJuyKcPUN3SDf15-Z8/edit)
