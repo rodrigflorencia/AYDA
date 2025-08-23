@@ -127,7 +127,7 @@ template <class V, class C>
 list<V> Grafo<V, C>::getAdyacentes(const V &v) const
 {
    if (grafoMapa.find(v) == grafoMapa.end())
-       return list<V>;
+       return list<V>();
    const map<V, C> &ady = grafoMapa.find(v)->second;
   list< V> destino;
    for (typename map<V, C>::const_iterator it = ady.begin(); it != ady.end(); it++)

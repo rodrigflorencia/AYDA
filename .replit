@@ -1,8 +1,12 @@
 modules = ["cpp-clang14"]
-run = "g++ -o main Grafo/STL/main.cpp && ./main"
+run = "g++ Grafo/main.cpp -o main -IGrafo -IGrafo/Puntero -IGrafo/STL -I'Grafo/STL - mapa de mapa' && ./main"
 
 [nix]
 channel = "stable-25_05"
 
 [deployment]
-run = ["sh", "-c", "g++ -o main Grafo/STL/main.cpp && ./main"]
+run = [
+  "sh",
+  "-c",
+  "g++ Grafo/main.cpp -o main -IGrafo -IGrafo/Puntero -IGrafo/STL -I'Grafo/STL - mapa de mapa' && ./main",
+]
