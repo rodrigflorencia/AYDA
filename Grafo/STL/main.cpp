@@ -18,3 +18,4 @@ int main()
     cout << g;
 
   return 0;
+}
