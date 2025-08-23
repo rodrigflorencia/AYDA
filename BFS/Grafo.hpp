@@ -1,7 +1,7 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
-#include <unordered_map>
+#include <map>
 #include <set>
 
 #include <iostream>
@@ -30,7 +30,7 @@ public:
 
     friend  ostream& operator<<(ostream& os, const Grafo& g)
     {
-        for (typename unordered_map<V, set<V>>::const_iterator it = g.grafoMapa.begin(); it != g.grafoMapa.end(); it++)
+        for (typename map<V, set<V>>::const_iterator it = g.grafoMapa.begin(); it != g.grafoMapa.end(); it++)
     {
 
         cout<<it->first<<": { ";
@@ -44,7 +44,7 @@ public:
 private:
     
     bool noDirigido; // No se hace esto de usar un flag para GD/GND según objetos. Deberíamos tener una clase Grafo y dos clases hijas GD y GND, pero será en el próximo cuatrimestre.
-    unordered_map<V, set<V>> grafoMapa;
+    map<V, set<V>> grafoMapa;
 };
 
 #endif
