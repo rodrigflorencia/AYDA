@@ -1,3 +1,8 @@
+/***
+ * Grafo genérico utilizando STL.
+ * Implementación grafo con tipo de vértices parametrizado.
+ * Soporta grafo dirigido y no dirigido.
+ **/
 #ifndef GRAFO_H
 #define GRAFO_H
 
@@ -13,21 +18,27 @@ public:
   virtual ~Grafo();
   Grafo(bool noDirigido);
 
-  bool addVertice(const V &vertice);
-  bool delVertice(const V &vertice); // TODO borrar arcos que inciden en vertice
-                                     // y luego borrar vertice
+  void addVertice(const V &vertice); // agrega un vertice si no existe
+  void setVertice(const V &v1,
+                  const V &v2);      // TODO cambia las etiquetas del vertice
+  void delVertice(const V &vertice); // TODO borrar arcos que inciden en vertice
+                                     // y luego borrar vertice. Si usamos LA,
+                                     // actualizar índices.
   set<V> getVertices() const;
 
-  bool addArco(const V &deVertice, const V &aVertice);
-  bool delArco(const V &deVertice, const V &aVertice);
-  bool hayArco(const V &deVertice, const V &aVertice) const;
-  set<V> getAdyacentes(const V &vertice) const;
+  void addArco(const V &deVertice,
+               const V &aVertice); // agrega arco si no existe. agrega vertices
+                                   // si no existen
+  void delArco(const V &deVertice, const V &aVertice); // elimina arco
+  bool hayArco(const V &deVertice,
+               const V &aVertice) const; // devuelve true si existe el arco
+  set<V> getAdyacentes(const V &vertice)
+      const; // conjunto de etiquetas de vertices adyacentes a vertice dado
 
-  int nVertices() const;
-  int getGradoSalida(const V &v) const;
-  int getGrado(const V &v) const;
+  int nVertices() const; // cantidad de vertices actuales
 
   friend ostream &operator<<(ostream &os, const Grafo &g) {
+
     for (typename map<V, set<V>>::const_iterator it = g.grafoMapa.begin();
          it != g.grafoMapa.end(); it++) {
 
@@ -44,7 +55,9 @@ private:
   bool noDirigido; // No se hace esto de usar un flag para GD/GND según objetos.
                    // Deberíamos tener una clase Grafo y dos clases hijas GD y
                    // GND, pero será en el próximo cuatrimestre.
-  map<V, set<V>> grafoMapa;
+                   // Igual, OJO con las implementaciones, estén atentos a esto.
+
+  map<V, set<V>> grafoMapa; // Estructura válida para el mapa.
 };
 
 #endif

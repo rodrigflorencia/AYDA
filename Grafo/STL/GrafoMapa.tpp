@@ -41,7 +41,7 @@ template <class V>
 void Grafo<V>::addVertice(const V &v)
 {
     this->grafoMapa.insert({v, set<V>{}}); // el constructor vacio del set es O(1)
-    return true;
+   
 }
 
 /**
@@ -57,7 +57,7 @@ void Grafo<V>::addArco(const V &u, const V &v)
     this->grafoMapa[u].insert(v); // O(log n)
     if (this->noDirigido)
         this->grafoMapa[v].insert(u); // O(log n)
-    return true;
+   
 }
 
 /**
@@ -66,7 +66,7 @@ void Grafo<V>::addArco(const V &u, const V &v)
  * @param v Vértice destino.
  */
 template <class V>
-void Grafo<V>::hayArco(const V &u, const V &v) const
+bool Grafo<V>::hayArco(const V &u, const V &v) const
 {
     typename map<V, set<V>>::const_iterator it = grafoMapa.find(u); // O(log n)
 

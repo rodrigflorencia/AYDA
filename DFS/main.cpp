@@ -1,25 +1,25 @@
+#include "Grafo/Grafo.tpp"
+#include "dfs2.hpp"
 #include <iostream>
-#include "Grafo.tpp"
-#include "dfs.hpp"
-int main()
-{
-  Grafo<int> g;
+int main() {
+  Grafo<char> g;
 
-  g.addVertice(1);
-  g.addVertice(2);
-  g.addVertice(3);
-  g.addVertice(2);
-  g.addVertice(4);
-  g.addVertice(4);
+  g.addVertice('X');
+  g.addVertice('B');
+  g.addVertice('M');
+  g.addVertice('D');
+  g.addVertice('P');
+  g.addVertice('F');
 
-  g.addArco(0, 3);
-  g.addArco(0, 1);
-  g.addArco(2, 3);
-  g.addArco(2, 0);
-  g.addArco(1, 4);
-  g.addArco(2, 4);
+  g.addArco('X', 'D');
+  g.addArco('X', 'M');
+  g.addArco('B', 'F');
+  g.addArco('B', 'P');
+  g.addArco('P', 'X');
+  g.addArco('F', 'B');
+  g.addArco('D', 'F');
 
-  cout << g;
+  cout << "Grafo\n" << g << endl;
   dfsForestArcos(g);
   cout << hayCicloSimple(g);
 
