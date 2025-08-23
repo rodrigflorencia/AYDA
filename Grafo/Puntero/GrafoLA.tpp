@@ -444,7 +444,7 @@ bool Grafo<TipoVertice, TipoArco>::hayArco(const TipoVertice &o, const TipoVerti
  * @warning El puntero retornado es válido mientras no se modifique/elimine la arista o el grafo.
  */
 template <class TipoVertice, class TipoArco>
-const TipoArco *Grafo<TipoVertice, TipoArco>::getCosto(const TipoVertice &o, const TipoVertice &d) const
+const TipoArco *Grafo<TipoVertice, TipoArco>::getPeso(const TipoVertice &o, const TipoVertice &d) const
 {
     const Nodo *origen = this->grafoNodo;
     const Nodo *dest = this->grafoNodo;
@@ -480,7 +480,7 @@ const TipoArco *Grafo<TipoVertice, TipoArco>::getCosto(const TipoVertice &o, con
  * @complexity O(n) porque n vertices y grado (n) para la arista
  */
 template <class TipoVertice, class TipoArco>
-void Grafo<TipoVertice, TipoArco>::setCosto(const TipoVertice &o, const TipoVertice &d, const TipoArco &costo)
+void Grafo<TipoVertice, TipoArco>::setPeso(const TipoVertice &o, const TipoVertice &d, const TipoArco &costo)
 {
     Nodo *origen = this->grafoNodo;
     Nodo *dest = this->grafoNodo;
@@ -593,28 +593,6 @@ TipoVertice* Grafo<TipoVertice, TipoArco>::getVertices() const
 {
     // TODO
     return nullptr;
-}
-
-/**
- * @brief Retorna el grado de salida del vértice @p v.
- *
- * En grafos no dirigidos, coincide con el grado usual.
- *
- * @param v Etiqueta del vértice.
- * @return Número de adyacencias salientes de @p v.
- * @tparam TipoVertice
- * @tparam TipoArco
- * @complexity O() para ubicar el nodo + O(1) para leer el contador.
- */
-template <class TipoVertice, class TipoArco>
-int Grafo<TipoVertice, TipoArco>::getGradoSalida(const TipoVertice &v) const
-{
-    const Nodo *temp = this->grafoNodo;
-    while (temp != nullptr && !(temp->etiqueta == v))
-        temp = temp->sig;
-    if (temp == nullptr)
-        return 0;
-    return temp->adyacencias; // out-degree; en no-dirigido coincide con grado
 }
 
 /**

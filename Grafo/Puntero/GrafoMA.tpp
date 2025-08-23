@@ -9,7 +9,7 @@
  *  - Valor sentinela grafoMatrizSinArista indica ausencia de arista.
  *  - Modo dirigido/no dirigido configurable en el constructor.
  *  - void iniciarMatriz() método aux
- *  -  void iniciarArreglo() método aux
+ *  - void iniciarArreglo() método aux
  *
  * Complejidad (siempre con N vertices fijo):
  *  - addVertice: O(1) amortizado (chequeo de capacidad) + O(1) asignación.
@@ -239,7 +239,7 @@ bool Grafo<V, C>::hayArco(const V &u, const V &v) const
  * @warning El puntero retornado es válido mientras no se destruya el grafo ni se cambie la arista/sentinela.
  */
 template <typename V, typename C>
-const C *Grafo<V, C>::getCosto(const V &u, const V &v) const
+const C *Grafo<V, C>::getPeso(const V &u, const V &v) const
 {
     int iU = getClave(u);
     int iV = getClave(v);
@@ -275,24 +275,6 @@ void Grafo<V, C>::imprimir() const
     }
 }
 
-/**
- * @brief Grado de salida del vértice u (cantidad de vecinos alcanzables desde u).
- * @param u Etiqueta del vértice.
- * @return Número de adyacentes salientes.
- * @complexity O(nVertices) para ubicar la clave + O(N) para recorrer la fila.
- */
-template <typename V, typename C>
-int Grafo<V, C>::getGradoSalida(const V &u) const
-{
-    int salida = 0;
-    int ku = this->getClave(u);
-    for (int i = 0; i < this->grafoMatrizN; i++)
-    {
-        if (this->grafoMatriz[i][ku] != this->grafoMatrizSinArista)
-            salida++;
-    }
-    return salida;
-}
 
 /**
  * @brief Devuelve un arreglo con los adyacentes salientes de u.

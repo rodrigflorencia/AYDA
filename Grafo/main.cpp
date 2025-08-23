@@ -1,28 +1,25 @@
-/**
-#include "STL/Grafo.tpp"
+
+#include "STL-LA/Grafo.hpp"
 
 int main() {
-  Grafo<int> g;
+  Grafo<char> g;
 
-  g.addVertice(1);
-  g.addVertice(2);
-  g.addVertice(3);
-  g.addVertice(2);
-  g.addVertice(4);
-  g.addVertice(4);
+  g.addVertice('A');
+  g.addVertice('B');
+  g.addVertice('C');
+  g.addVertice('D');
+  g.addVertice('E');
+  g.addVertice('F');
 
-  g.addArco(0, 3);
-  g.addArco(0, 1);
-  g.addArco(2, 3);
-  g.addArco(2, 0);
-  g.addArco(1, 4);
-  g.addArco(2, 4);
+  g.addArco('A', 'B');
+  g.addArco('F', 'D');
+  g.addArco('2', 'A');
 
   cout << g;
 
   return 0;
 }
-***/
+/***
 #include "STL - mapa de mapa/Grafo.tpp"
 
 using namespace std;
@@ -40,8 +37,10 @@ int main() {
 
   cout << "Hay A-B? " << g.hayArco('A', 'B') << "\n";
   cout << "Hay C-B? " << g.hayArco('C', 'B') << "\n";
-  cout << "Peso A-C = " << (g.getCosto('A', 'C')) << "\n";
+  cout << "Peso A-C = " << g.getPeso('A', 'C') << "\n";
+  cout << "Peso A-D = " << g.getPeso('A', 'D') << "\n";
+  cout<<g;
 
   return 0;
 }
-/***/
+***/
