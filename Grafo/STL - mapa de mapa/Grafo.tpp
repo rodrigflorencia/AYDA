@@ -1,7 +1,7 @@
 #include "Grafo.hpp"
 
 /**
- * @brief Implementación de un grafo genérico utilizando lista de adyacencias con nordered_map.
+ * @brief Implementación de un grafo genérico utilizando lista de adyacencias con map.
  * @tparam V Tipo de dato para los vértices.
  * @tparam C Tipo de dato para los costos/pesos de las aristas.
  */
@@ -12,7 +12,7 @@ Grafo<V, C>::Grafo()
 }
 
 /**
- * @brief Destructor. Actualmente no es necesario porque usamos unordered_map, que maneja su propia memoria.
+ * @brief Destructor..
  */
 template <class V, class C>
 Grafo<V, C>::~Grafo()
@@ -38,7 +38,7 @@ Grafo<V, C>::Grafo(bool noDirigido)
 template <class V, class C>
 bool Grafo<V, C>::addVertice(const V &v)
 {
-    this->grafoMapa.emplace(v, unordered_map<V, C>{}).second;
+    this->grafoMapa.emplace(v, map<V, C>{}).second;
     return true;
 }
 
@@ -79,7 +79,7 @@ bool Grafo<V, C>::addArco(const V &u, const V &v)
 template <class V, class C>
 bool Grafo<V, C>::hayArco(const V &u, const V &v) const
 {
-    typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.find(u);
+    typename map<V, map<V, C>>::const_iterator it = this->grafoMapa.find(u);
 
     if (it == this->grafoMapa.end())
     {
@@ -100,16 +100,16 @@ template <class V, class C>
 const C Grafo<V, C>::getCosto(const V &u, const V &v) const
 {
     // iterador a la fila (u)
-    typename unordered_map<V, unordered_map<V, C>>::const_iterator itU =
+    typename map<V, map<V, C>>::const_iterator itU =
         this->grafoMapa.find(u);
     if (itU == this->grafoMapa.end())
         return 0;
 
     // referencia constante a la fila de u
-    const unordered_map<V, C> &fila = itU->second;
+    const map<V, C> &fila = itU->second;
 
     // iterador a la columna (v) dentro de la fila
-    typename unordered_map<V, C>::const_iterator itV = fila.find(v);
+    typename map<V, C>::const_iterator itV = fila.find(v);
     if (itV == fila.end())
         return 0; // o nullptr
 
@@ -118,19 +118,19 @@ const C Grafo<V, C>::getCosto(const V &u, const V &v) const
 }
 
 /**
- * @brief Devuelve un arreglo dinámico con los adyacentes de un vértice.
+ * @brief Devuelve una lista con los adyacentes de un vértice.
  * @param v Vértice de referencia.
- * @return Puntero a un arreglo con los vértices adyacentes, o nullptr si no hay adyacencias.
+ * @return Lista con los vértices adyacentes, o lista vacía si no hay adyacencias.
  */
 
 template <class V, class C>
 list<V> Grafo<V, C>::getAdyacentes(const V &v) const
 {
    if (grafoMapa.find(v) == grafoMapa.end())
-       return nullptr;
-   const unordered_map<V, C> &ady = grafoMapa.find(v)->second;
+       return list<V>;
+   const map<V, C> &ady = grafoMapa.find(v)->second;
   list< V> destino;
-   for (typename unordered_map<V, C>::const_iterator it = ady.begin(); it != ady.end(); it++)
+   for (typename map<V, C>::const_iterator it = ady.begin(); it != ady.end(); it++)
    {
        destino.push_back(it->first);
    }
@@ -141,7 +141,7 @@ template <class V, class C>
 list<V> Grafo<V, C>::getVertices() const
 {
    list<V> v ;
-   for (typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.begin();it != this->grafoMapa.end();it++){
+   for (typename map<V, map<V, C>>::const_iterator it = this->grafoMapa.begin();it != this->grafoMapa.end();it++){
        v.push_back(it->first); 
    }
    return v;
@@ -169,9 +169,8 @@ template <class V, class C>
 int Grafo<V, C>::getGradoSalida(const V &u) const
 {
     //TODO
-    if (this->grafoMapa.find(u) == this->grafoMapa.end())
+   
         return -1;
-    return this->grafoMapa.find(u)->second.size();
 }
 /**
  * @brief Devuelve la cantidad de vértices actuales del grafo.
@@ -186,11 +185,11 @@ int Grafo<V, C>::nVertices() const
 template <class V, class C>
 void Grafo<V, C>::imprimir() const
 {
-    for (typename unordered_map<V, unordered_map<V, C>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)
+    for (typename map<V, map<V, C>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)
     {
 
         cout << it->first << ": { ";
-        for (typename unordered_map<V, C>::const_iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
+        for (typename map<V, C>::const_iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
             cout << it2->first << " ; ";
         cout << " } \n";
     }
