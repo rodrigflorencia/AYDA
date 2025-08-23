@@ -2,9 +2,6 @@
 #include "include/puntero/GrafoLista.cpp"
 #include "include/rotulado/GrafoRotulado.hpp"
 
-#include "include/dfs.hpp"
-#include "include/redSocial.hpp"
-
 /**
  * Pruebas de la implementación de grafo rotulado con punteros
  */
@@ -75,61 +72,6 @@ int grafo() {
   g.addArco('2', 'A');
 
   cout << "\n\nGrafo implementado como lista de adyacentes\n" << g;
-
-  return 0;
-}
-/**
-Prueba del dfs
-***/
-int dfs() {
-  Grafo<char> g;
-
-  g.addVertice('X');
-  g.addVertice('B');
-  g.addVertice('M');
-  g.addVertice('D');
-  g.addVertice('P');
-  g.addVertice('F');
-
-  g.addArco('X', 'D');
-  g.addArco('X', 'M');
-  g.addArco('B', 'F');
-  g.addArco('B', 'P');
-  g.addArco('P', 'X');
-  g.addArco('F', 'B');
-  g.addArco('D', 'F');
-
-  cout << "Grafo\n" << g << endl;
-  dfsForestArcos(g);
-  cout << hayCicloSimple(g);
-
-  return 0;
-}
-
-int redSocial() {
-  Grafo<string> g;
-
-  g.addVertice("@pupi");
-  g.addVertice("@pepe");
-  g.addVertice("@toto");
-  g.addVertice("@pepe");
-  g.addVertice("@rodo");
-  g.addVertice("@tito");
-  g.addVertice("@rodo");
-  g.addVertice("@luli");
-  g.addArco("@kuky", "@toto");
-  g.addArco("@kuky", "@pupi");
-  g.addArco("@pepe", "@toto");
-  g.addArco("@pepe", "@kuky");
-  g.addArco("@pepe", "@luli");
-  g.addArco("@pepe", "@rodo");
-  g.addArco("@rodo", "@tito");
-
-  cout << g;
-  string usuario = "@pepe";
-  set<string> r = recomendaciones(g, usuario);
-  cout << "\nRecomendaciones para " << usuario << endl;
-  mostrarRecomendaciones(r);
 
   return 0;
 }
