@@ -13,7 +13,7 @@ Grafo<V>::Grafo()
 }
 
 /**
- * @brief Destructor. Actualmente no es necesario porque usamos unordered_map, que maneja su propia memoria.
+ * @brief Destructor. Actualmente no es necesario porque usamos map, que maneja su propia memoria.
  * Aunque podemos hacer clear que tiene una complejidad lineal del tamaño de la estructura.
  */
 template <class V>
@@ -70,7 +70,7 @@ bool Grafo<V>::addArco(const V &u, const V &v)
 template <class V>
 bool Grafo<V>::hayArco(const V &u, const V &v) const
 {
-    typename unordered_map<V, set<V>>::const_iterator it = grafoMapa.find(u);
+    typename map<V, set<V>>::const_iterator it = grafoMapa.find(u);
 
     if (it == grafoMapa.end())
     {
@@ -116,7 +116,7 @@ set<V> Grafo<V>::getVertices() const
 {
     set<V> v;
     int i=0;
-    for (typename unordered_map<V, set<V>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)       
+    for (typename map<V, set<V>>::const_iterator it = this->grafoMapa.begin(); it != this->grafoMapa.end(); it++)       
      v.insert(it->first);
     return v;
 
