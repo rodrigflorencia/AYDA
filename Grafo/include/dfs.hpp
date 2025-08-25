@@ -110,7 +110,6 @@ void dfsVisit(const Grafo<V> &g, const V &v, set<V> &visitados, list<V> &orden) 
 }
 
 template <class V> void dfsForest(const Grafo<V> &g) {
-  const int n = g.nVertices();
   set<V> visitados;
 
   list<V> orden;
@@ -149,7 +148,7 @@ bool dfsCicloVisit(const Grafo<V> &g, const V &v, map<V, Estado> estado) {
 }
 
 template <class V> bool hayCicloSimple(const Grafo<V> &g) {
-  const int n = g.nVertices();
+  
   set<V> vertices = g.getVertices();
 
   map<V, Estado> estado; // set para GND
