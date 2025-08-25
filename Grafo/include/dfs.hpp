@@ -94,7 +94,7 @@ template <class V> void dfsForestArcos(const Grafo<V> &g) {
 // =======================
 
 template <class V>
-void dfsVisit(const Grafo<V> &g, int v, set<V> &visitados, list<V> &orden) {
+void dfsVisit(const Grafo<V> &g, const V &v, set<V> &visitados, list<V> &orden) {
   visitados.insert(v);
 
   set<V> ady = g.getAdyacentes(v);
@@ -128,7 +128,7 @@ template <class V> void dfsForest(const Grafo<V> &g) {
 // =======================
 
 template <class V>
-bool dfsCicloVisit(const Grafo<V> &g, int v, map<V, Estado> estado) {
+bool dfsCicloVisit(const Grafo<V> &g, const V &v, map<V, Estado> estado) {
   estado[v] = VISITADO; // Si es GND usar set
 
   set<V> ady = g.getAdyacentes(v);
