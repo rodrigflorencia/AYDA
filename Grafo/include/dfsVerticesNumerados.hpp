@@ -23,26 +23,26 @@ using ArcoClasificado = std::pair<ClaseArco, Arco>;
 void dfsVisitArcos(const Grafo<int> &g, int v,
                    list<ArcoClasificado> &listaArcos, int &tiempo,
                    Estado *estado, int *descubrimiento) {
-  tiempo++;
-  descubrimiento[v] = tiempo;
-  estado[v] = VISITADO;
+  tiempo++;// no es necesario si es GND
+  descubrimiento[v] = tiempo; // no es necesario si es GND
+  estado[v] = VISITADO; // usar set si es GND
 
   set<int> ady = g.getAdyacentes(v);
 
   for (set<int>::const_iterator u = ady.begin(); u != ady.end(); u++) {
 
     if (estado[*u] == NOVISITADO) {
-      listaArcos.push_back({TREE, {v, *u}});
+      listaArcos.push_back({TREE, {v, *u}}); // Agregar *u-> v si es GND
       dfsVisitArcos(g, *u, listaArcos, tiempo, estado, descubrimiento);
     } else {
       if (estado[*u] == VISITADO) {
-        listaArcos.push_back({BACK, {v, *u}});
+        listaArcos.push_back({BACK, {v, *u}});// Agregar *u-> v si es GND
       } else {
         // COMPLETO: FORWARD o CROSS según tiempos
         if (descubrimiento[v] < descubrimiento[*u]) {
-          listaArcos.push_back({FORWARD, {v, *u}});
+          listaArcos.push_back({FORWARD, {v, *u}});// Agregar *u-> v si es GND
         } else {
-          listaArcos.push_back({CROSS, {v, *u}});
+          listaArcos.push_back({CROSS, {v, *u}});// Agregar *u-> v si es GND
         }
       }
     }
@@ -56,14 +56,14 @@ void dfsForestArcos(const Grafo<int> &g) {
   list<ArcoClasificado> listaArcos;
   set<int> vertices = g.getVertices();
   Estado *estado = new Estado[n];
-  int *descubrimiento = new int[n];
+  int *descubrimiento = new int[n]; // no es necesario si es GND
 
   for (set<int>::const_iterator i = vertices.begin(); i != vertices.end();
        i++) {
     estado[*i] = NOVISITADO;
     descubrimiento[*i] = -1;
   }
-  int tiempo = 0;
+  int tiempo = 0; // no es necesario si es GND
 
   for (int v = 0; v < n; ++v) {
     if (estado[v] == NOVISITADO) {
@@ -121,7 +121,7 @@ void dfsForest(const Grafo<int> &g) {
 // =======================
 
 bool dfsCicloVisit(const Grafo<int> &g, int v, Estado *estado) {
-  estado[v] = VISITADO;
+  estado[v] = VISITADO; // si es GND usar set
 
   set<int> ady = g.getAdyacentes(v);
 
@@ -136,7 +136,7 @@ bool dfsCicloVisit(const Grafo<int> &g, int v, Estado *estado) {
     u++;
   }
 
-  estado[v] = COMPLETO;
+  estado[v] = COMPLETO; // si es GND no es necesario
   return ciclo;
 }
 
@@ -144,7 +144,7 @@ bool hayCicloSimple(const Grafo<int> &g) {
   const int n = g.nVertices();
   set<int> vertices = g.getVertices();
 
-  Estado *estado = new Estado[n];
+  Estado *estado = new Estado[n]; // si es GND usar set
   for (set<int>::const_iterator v = vertices.begin(); v != vertices.end(); v++)
     estado[*v] = NOVISITADO;
 
