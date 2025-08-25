@@ -25,12 +25,13 @@ template <class V> using ArcoClasificado = pair<ClaseArco, Arco<V>>;
 
 // =======================
 // DFS (clasificación de arcos)
+// Para grafos no dirigidos no es necesario descubrimiento y tiempo. estado debe ser un set
 // =======================
 template <class V>
 void dfsVisitArcos(const Grafo<V> &g, const V &v,
                    list<ArcoClasificado<V>> &listaArcos, int &tiempo,
                    map<V, Estado> &estado, map<V, int> &descubrimiento) {
-  ++tiempo;
+  tiempo++;
   descubrimiento[v] = tiempo;
   estado[v] = VISITADO;
 
@@ -38,17 +39,17 @@ void dfsVisitArcos(const Grafo<V> &g, const V &v,
 
   for (typename set<V>::const_iterator u = ady.begin(); u != ady.end(); ++u) {
     if (estado[*u] == NOVISITADO) {
-      listaArcos.push_back({TREE, {v, *u}});
+      listaArcos.push_back({TREE, {v, *u}});// Agregar *u-> v si es GND
       dfsVisitArcos(g, *u, listaArcos, tiempo, estado, descubrimiento);
     } else {
       if (estado[*u] == VISITADO) {
-        listaArcos.push_back({BACK, {v, *u}});
+        listaArcos.push_back({BACK, {v, *u}});// Agregar *u-> v si es GND
       } else {
         // COMPLETO: FORWARD o CROSS según tiempos
         if (descubrimiento[v] < descubrimiento[*u]) {
-          listaArcos.push_back({FORWARD, {v, *u}});
+          listaArcos.push_back({FORWARD, {v, *u}}); // Agregar *u-> v si es GND
         } else {
-          listaArcos.push_back({CROSS, {v, *u}});
+          listaArcos.push_back({CROSS, {v, *u}});// Agregar *u-> v si es GND
         }
       }
     }
@@ -63,10 +64,9 @@ template <class V> void dfsForestArcos(const Grafo<V> &g) {
                   // Cada elemento es un par <Tipo de arco, {Origen, Destino}>
 
   set<V> vertices = g.getVertices();
-  map<V, Estado> estado;
-  map<V, int> descubrimiento;
-  int tiempo = 0;
-  int i = 0;
+  map<V, Estado> estado; // si el grafo es ND, cambiar por set
+  map<V, int> descubrimiento; // no es necesario si el grafo es ND
+  int tiempo = 0;// no es necesario si el grafo es ND
 
   for (typename set<V>::const_iterator itV = vertices.begin();
        itV != vertices.end(); itV++) {
@@ -124,12 +124,12 @@ template <class V> void dfsForest(const Grafo<V> &g) {
 }
 
 // =======================
-// Detección de ciclo simple (en dirigidos)
+// Detección de ciclo simple
 // =======================
 
 template <class V>
 bool dfsCicloVisit(const Grafo<V> &g, int v, map<V, Estado> estado) {
-  estado[v] = VISITADO;
+  estado[v] = VISITADO; // Si es GND usar set
 
   set<V> ady = g.getAdyacentes(v);
 
@@ -144,7 +144,7 @@ bool dfsCicloVisit(const Grafo<V> &g, int v, map<V, Estado> estado) {
     u++;
   }
 
-  estado[v] = COMPLETO;
+  estado[v] = COMPLETO; // Si es GND comentar linea
   return ciclo;
 }
 
@@ -152,7 +152,7 @@ template <class V> bool hayCicloSimple(const Grafo<V> &g) {
   const int n = g.nVertices();
   set<V> vertices = g.getVertices();
 
-  map<V, Estado> estado;
+  map<V, Estado> estado; // set para GND
   for (typename set<V>::const_iterator v = vertices.begin();
        v != vertices.end(); v++)
     estado[*v] = NOVISITADO;
